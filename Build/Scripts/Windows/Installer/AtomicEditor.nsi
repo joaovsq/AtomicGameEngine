@@ -18,7 +18,6 @@
 !define coname "THUNDERBEAST GAMES LLC"
 !define outfile "${ATOMIC_ROOT}\Artifacts\Dist\${INSTALLER_NAME}"
 !define appexe "AtomicEditor.exe"
-!define produrl "http://www.atomicgameengine.com/"
 
 ;--------------------------------
 ;Include Modern UI

@@ -1,5 +1,6 @@
-
 set(JAVASCRIPT_BINDINGS_PLATFORM "WINDOWS")
+
+message("ATOMIC WINDOWS CMAKE ------------------------------------------------------------")
 
 include(AtomicDesktop)
 
