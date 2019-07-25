@@ -24,3 +24,4 @@ Script/TypeScript/**/*.d.ts
 Script/Haxe/*
 **/.vscode
 .idea
+Atomic.log

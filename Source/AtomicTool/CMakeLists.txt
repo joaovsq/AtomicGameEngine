@@ -48,7 +48,8 @@ add_custom_target ( GenerateScriptBindings
                     COMMAND ${ATOMIC_NODE_JAKE};build:genscripts[true];--trace
                     DEPENDS AtomicTool )
 
-add_custom_target ( GenerateAtomicNET
-                    WORKING_DIRECTORY "${ATOMIC_SOURCE_DIR}"
-                    COMMAND ${ATOMIC_NODE_JAKE};build:genAtomicNET[desktop,$<$<CONFIG:debug>:"Debug">$<$<CONFIG:release>:"Release">];--trace
-                    DEPENDS AtomicTool )
+# TODO: Decide if we should keep this
+#add_custom_target ( GenerateAtomicNET
+#                    WORKING_DIRECTORY "${ATOMIC_SOURCE_DIR}"
+#                    COMMAND ${ATOMIC_NODE_JAKE};build:genAtomicNET[desktop,$<$<CONFIG:debug>:"Debug">$<$<CONFIG:release>:"Release">];--trace
+#                    DEPENDS AtomicTool )

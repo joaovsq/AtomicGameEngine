@@ -1,9 +1,9 @@
 @echo OFF
 
-call %0\..\SetupVSEnvironment.bat %2
+call %0\..\SetupVSEnvironment.bat
 
 if not defined ATOMIC_CMAKE_GENERATOR (
-  @echo Problem setting up %2 compilation environment
+  @echo Problem setting up Visual Studio compilation environment
   exit /b 1
 )
 

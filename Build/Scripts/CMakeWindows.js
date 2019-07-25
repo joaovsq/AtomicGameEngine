@@ -17,8 +17,7 @@ namespace('build', function() {
     return path.replace(/\//g, "\\").replace(/\\$/, "");
   }
 
-  // get CMake flags for generator, vsver parameter can be VS2017/VS2015, etc
-  function getCMakeFlags(vsver) {
+  function getCMakeFlags() {
 
     // local cmake builds are always dev builds
     var flags = "-DATOMIC_DEV_BUILD=1";
@@ -32,20 +31,17 @@ namespace('build', function() {
   }
 
   // spawn cmake process
-  function spawnCMake(vsver) {
+  function spawnCMake() {
 
     host.cleanCreateDir(atomicRoot + "/Artifacts/Build/Source/Generated");
 
-    var slnRoot = fixpath(path.resolve(atomicRoot, "") + "-" + vsver);
+    var slnRoot = fixpath(path.resolve(atomicRoot, "") + "-VS");
 
     // we're running cmd.exe, this exits the shell when the command have finished
     var args = ["/C"];
 
     // Windows batch file which runs cmake
     args.push(fixpath(atomicRoot + "\\Build\\Scripts\\Windows\\GenerateVSSolution.bat"));
-
-    // vsver VS2015/VS2017
-    args.push(vsver);
 
     // Atomic root source dir
     args.push(fixpath(atomicRoot));
@@ -54,7 +50,7 @@ namespace('build', function() {
     args.push(fixpath(slnRoot));
 
     // CMake flags
-    args.push(getCMakeFlags(vsver));
+    args.push(getCMakeFlags());
 
     // we're using nodeSpawn here instead of jake.exec as the later was having much trouble with quotes
     var cmakeProcess = nodeSpawn("cmd.exe", args);
@@ -73,7 +69,7 @@ namespace('build', function() {
         fail(`CMake process exited with code ${code}`);
       }
 
-      console.log("\n\n" + vsver + " solution created in " + fixpath(slnRoot) + "\n\n");
+      console.log("\n\n" + " solution created in " + fixpath(slnRoot) + "\n\n");
 
       complete();
 
@@ -81,24 +77,15 @@ namespace('build', function() {
 
   }
 
-  task('genvs2017', {
+  task('genvs', {
     async: true
   }, function() {
 
-    spawnCMake("VS2017");
+    spawnCMake();
 
   }, {
     printStdout: true,
     printStderr: true
-  });
-
-  // Generate a Visual Studio 2015 solution
-  task('genvs2015', {
-    async: true
-  }, function() {
-
-    spawnCMake("VS2015");
-
   });
 
 });// end of build namespace

@@ -14,10 +14,10 @@ function copyAtomicNET() {
         return;
 
     fs.copySync(atomicRoot + "Artifacts/AtomicNET/" + config["config"],
-    editorAppFolder + "Resources/ToolData/AtomicNET/" + config["config"]);
+        editorAppFolder + "Resources/ToolData/AtomicNET/" + config["config"]);
 
     fs.copySync(atomicRoot + "Script/AtomicNET/AtomicProject.json",
-    editorAppFolder + "Resources/ToolData/AtomicNET/Build/Projects/AtomicProject.json");
+        editorAppFolder + "Resources/ToolData/AtomicNET/Build/Projects/AtomicProject.json");
 
 }
 
@@ -25,70 +25,65 @@ function copyAtomicEditor() {
 
     // Copy the Editor binaries
     fs.copySync(buildDir + "Source/AtomicEditor/" + config["config"],
-    config.artifactsRoot + "AtomicEditor");
+        config.artifactsRoot + "AtomicEditor");
 
     // copy AtomicTool
-    fs.copySync(buildDir +  "Source/AtomicTool/" + config["config"] +"/AtomicTool.exe",
-    editorAppFolder + "AtomicTool.exe");
+    fs.copySync(buildDir + "Source/AtomicTool/" + config["config"] + "/AtomicTool.exe",
+        editorAppFolder + "AtomicTool.exe");
 
     // We need some resources to run
     fs.copySync(atomicRoot + "Resources/CoreData",
-    editorAppFolder + "Resources/CoreData");
+        editorAppFolder + "Resources/CoreData");
 
     fs.copySync(atomicRoot + "Resources/PlayerData",
-    editorAppFolder + "Resources/PlayerData");
+        editorAppFolder + "Resources/PlayerData");
 
     fs.copySync(atomicRoot + "Data/AtomicEditor",
-    editorAppFolder + "Resources/ToolData");
+        editorAppFolder + "Resources/ToolData");
 
     fs.copySync(atomicRoot + "Resources/EditorData",
-    editorAppFolder + "Resources/EditorData");
+        editorAppFolder + "Resources/EditorData");
 
     fs.copySync(atomicRoot + "Artifacts/Build/Resources/EditorData/AtomicEditor/EditorScripts",
-    editorAppFolder + "Resources/EditorData/AtomicEditor/EditorScripts");
+        editorAppFolder + "Resources/EditorData/AtomicEditor/EditorScripts");
 
-    fs.copySync(buildDir +  "Source/AtomicPlayer/Application/" + config["config"] +"/AtomicPlayer.exe",
-    editorAppFolder + "Resources/ToolData/Deployment/Windows/x64/AtomicPlayer.exe");
+    fs.copySync(buildDir + "Source/AtomicPlayer/Application/" + config["config"] + "/AtomicPlayer.exe",
+        editorAppFolder + "Resources/ToolData/Deployment/Windows/x64/AtomicPlayer.exe");
 
-    fs.copySync(buildDir +  "Source/AtomicPlayer/Application/" + config["config"] + "/D3DCompiler_47.dll",
-    editorAppFolder + "Resources/ToolData/Deployment/Windows/x64/D3DCompiler_47.dll");
+    fs.copySync(buildDir + "Source/AtomicPlayer/Application/" + config["config"] + "/D3DCompiler_47.dll",
+        editorAppFolder + "Resources/ToolData/Deployment/Windows/x64/D3DCompiler_47.dll");
 
     copyAtomicNET();
 
 }
 
-namespace('build', function() {
+namespace('build', function () {
 
-    // get CMake flags for generator, vsver parameter can be VS2017/VS2015, etc
-    function getCMakeFlags(vsver) {
+    function getCMakeFlags() {
+        var flags = "\"";
 
-      var flags = "\"";
+        // Redistributable editor build
+        flags += "-DATOMIC_DEV_BUILD=0";
 
-      // Redistributable editor build
-      flags += "-DATOMIC_DEV_BUILD=0";
+        // graphics backend overrides, defaults to D3D11
+        flags += " -DATOMIC_OPENGL=" + (config["opengl"] ? "ON" : "OFF");
+        flags += " -DATOMIC_D3D9=" + (config["d3d9"] ? "ON" : "OFF");
 
-      // graphics backend overrides, defaults to D3D11
-      flags += " -DATOMIC_OPENGL=" + (config["opengl"] ? "ON" : "OFF");
-      flags += " -DATOMIC_D3D9=" + (config["d3d9"] ? "ON" : "OFF");
+        flags += "\"";
 
-      flags += "\"";
-
-      return flags;
-
+        return flags;
     }
 
     task('atomiceditor_phase2', {
         async: true
-    }, function() {
+    }, function () {
 
         process.chdir(buildDir);
 
-        var vsver = (config["vs2017"] ? "VS2017" : "VS2015");
-
         var cmds = [];
-        cmds.push(atomicRoot + "Build/Scripts/Windows/CompileAtomicEditorPhase2.bat " + config["config"] + " " + vsver);
+        cmds.push(atomicRoot + "Build/Scripts/Windows/CompileAtomicEditorPhase2.bat " + config["config"]);
 
-        jake.exec(cmds, function() {
+        jake.exec(cmds, function () {
 
             copyAtomicEditor();
 
@@ -101,14 +96,14 @@ namespace('build', function() {
             complete();
 
         }, {
-            printStdout: true
-        });
+                printStdout: true
+            });
 
     });
     // Builds a standalone Atomic Editor, which can be distributed out of build tree
     task('atomiceditor', {
         async: true
-    }, function() {
+    }, function () {
 
         // Always cleanly create the editor target folder
         host.cleanCreateDir(editorAppFolder);
@@ -122,15 +117,13 @@ namespace('build', function() {
 
         process.chdir(buildDir);
 
-        var vsver = (config["vs2017"] ? "VS2017" : "VS2015");
-
         var cmds = [];
 
         // Generate Atomic solution, AtomicTool binary, and script bindings
-        cmds.push(atomicRoot + "Build/Scripts/Windows/CompileAtomicEditorPhase1.bat " + config["config"] + " " +
-                  vsver + " " + getCMakeFlags(vsver));
+        cmds.push(atomicRoot + "Build/Scripts/Windows/CompileAtomicEditorPhase1.bat " + config["config"] + " "
+            + getCMakeFlags());
 
-        jake.exec(cmds, function() {
+        jake.exec(cmds, function () {
 
             var rootTask = jake.Task['build:atomiceditor_phase2'];
 
@@ -146,9 +139,9 @@ namespace('build', function() {
             rootTask.invoke();
 
         }, {
-            printStdout: true,
-            printStderr: true
-        });
+                printStdout: true,
+                printStderr: true
+            });
 
     });
 
