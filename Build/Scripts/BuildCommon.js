@@ -14,12 +14,12 @@ var jsDocFolder = config.artifactsRoot + "Build/JSDoc/";
 var cppDocFolder = config.artifactsRoot + "Build/CPPDocs/";
 var csharpDocFolder = config.artifactsRoot + "Build/CSharpDocs/";
 
-namespace('build', function() {
+namespace('build', function () {
 
     // Linting task
     task('lint_typescript', {
         async: true
-    }, function(fileMask, failOnError) {
+    }, function (fileMask, failOnError) {
 
         console.log("TSLINT: Linting files in " + fileMask);
         var lintConfig = JSON.parse(fs.readFileSync("./Script/tslint.json"));
@@ -32,9 +32,9 @@ namespace('build', function() {
         // Since TSLint does not yet support recursively searching for files, then we need to
         // create a command per file.  The main issue with this is that it will abort on the first error instead
         // of listing out all lint errors
-        glob(fileMask, function(err, results) {
+        glob(fileMask, function (err, results) {
             var lintErrors = [];
-            results.forEach(function(filename) {
+            results.forEach(function (filename) {
 
                 var contents = fs.readFileSync(filename, "utf8");
 
@@ -58,7 +58,7 @@ namespace('build', function() {
     // precreate script bindgs so they can be picked up by CMake
     task('precreateScriptBindings', {
         async: true
-    }, function(clean) {
+    }, function (clean) {
 
         if (clean === undefined) {
             clean = true;
@@ -74,43 +74,40 @@ namespace('build', function() {
         complete();
     });
 
-    function fileExists(filePath)
-    {
-        try
-        {
+    function fileExists(filePath) {
+        try {
             return fs.statSync(filePath).isFile();
         }
-        catch (err)
-        {
+        catch (err) {
             return false;
         }
     }
 
     task('genAtomicNET', {
-      async:true
-    }, function(platform, configuration) {
+        async: true
+    }, function (platform, configuration) {
 
-      if (configuration != "Debug" && configuration != "Release")
-        configuration = "Release";
+        if (configuration != "Debug" && configuration != "Release")
+            configuration = "Release";
 
-      // Compile AtomicNET assemblies
-      var cmds = [];
+        // Compile AtomicNET assemblies
+        var cmds = [];
 
-      cmds.push(host.atomicTool + " net compile " + atomicRoot + "Script/AtomicNET/AtomicNETProject.json -platform " + platform + " -config " + configuration);
+        cmds.push(host.atomicTool + " net compile " + atomicRoot + "Script/AtomicNET/AtomicNETProject.json -platform " + platform + " -config " + configuration);
 
-      jake.exec(cmds, function() {
+        jake.exec(cmds, function () {
 
-          complete();
+            complete();
 
-      }, {
-          printStdout: true
-      });
+        }, {
+                printStdout: true
+            });
 
     })
 
     task('genscripts', {
         async: true
-    }, function(force) {
+    }, function (force) {
 
         // default to true
         if (force != "true" && force != "false") {
@@ -123,8 +120,7 @@ namespace('build', function() {
             var filenames = common.getGenScriptFilenames();
             for (var i in filenames) {
 
-                if (!fileExists(filenames[i]))
-                {
+                if (!fileExists(filenames[i])) {
                     console.log("genscripts: file missing, regenerating script bindings: " + filenames[i]);
                     anyZero = true;
                     break;
@@ -171,7 +167,7 @@ namespace('build', function() {
 
                 console.log("\n\nLint: Typescript linting complete.\n\n");
 
-                jake.exec(cmds, { printStdout : true, printStderr: true }, function() {
+                jake.exec(cmds, { printStdout: true, printStderr: true }, function () {
 
                     // copy some external dependencies into the editor modules directory
                     var editorModulesDir = "./Artifacts/Build/Resources/EditorData/AtomicEditor/EditorScripts/AtomicEditor/modules";
@@ -183,16 +179,16 @@ namespace('build', function() {
 
                     // copy lib.core.d.ts into the tool data directory
                     fs.mkdirsSync("./Artifacts/Build/Resources/EditorData/AtomicEditor/EditorScripts/AtomicEditor/TypeScriptSupport");
-                    fs.copySync("./Build/node_modules/typescript/lib/lib.es5.d.ts","./Data/AtomicEditor/TypeScriptSupport/lib.es5.d.ts");
+                    fs.copySync("./Build/node_modules/typescript/lib/lib.es5.d.ts", "./Data/AtomicEditor/TypeScriptSupport/lib.es5.d.ts");
 
                     // copy the combined Atomic.d.ts to the tool data directory
-                    fs.copySync("./Script/TypeScript/dist/Atomic.d.ts","./Data/AtomicEditor/TypeScriptSupport/Atomic.d.ts")
+                    fs.copySync("./Script/TypeScript/dist/Atomic.d.ts", "./Data/AtomicEditor/TypeScriptSupport/Atomic.d.ts")
 
                     complete();
 
                 }, {
-                    printStdout: true
-                });
+                        printStdout: true
+                    });
             });
 
             lintTask.invoke("{./Script/AtomicEditor/**/*.ts,./Script/AtomicWebViewEditor/**/*.ts}", false);
@@ -205,148 +201,148 @@ namespace('build', function() {
     });
 
 
-  task('gendocs', {
-    async: true
-    }, function() {
+    task('gendocs', {
+        async: true
+    }, function () {
 
-    console.log( "Generating Docs..." );
+        console.log("Generating Docs...");
 
-    fs.copySync(atomicRoot + "Build/Docs/Readme.md", jsDocFolder + "Readme.md");
-    fs.copySync(atomicRoot + "Build/Docs/atomic-theme", jsDocFolder + "atomic-theme");
+        fs.copySync(atomicRoot + "Build/Docs/Readme.md", jsDocFolder + "Readme.md");
+        fs.copySync(atomicRoot + "Build/Docs/atomic-theme", jsDocFolder + "atomic-theme");
 
 
-    var typeDoc;
-    if (os.platform() == "win32") {
-        // uses system node for typedoc, which should have as require npm
-        typeDoc = "node_modules\\.bin\\typedoc.cmd";
-    }
-    else
-        typeDoc = host.node + " ./node_modules/.bin/typedoc";
+        var typeDoc;
+        if (os.platform() == "win32") {
+            // uses system node for typedoc, which should have as require npm
+            typeDoc = "node_modules\\.bin\\typedoc.cmd";
+        }
+        else
+            typeDoc = host.node + " ./node_modules/.bin/typedoc";
 
-    // tsdoc is having problems when name has spaces on Windows and Linux, tried quoting/escaping
-    // what should happen here is instead of command line use a json config file (or maybe new version of tsdoc fixes this)
-    var name = "Atomic-Game-Engine";
+        // tsdoc is having problems when name has spaces on Windows and Linux, tried quoting/escaping
+        // what should happen here is instead of command line use a json config file (or maybe new version of tsdoc fixes this)
+        var name = "Atomic-Game-Engine";
 
-    cmds = [
-      "cd " + jsDocFolder + " && echo {} > package.json", // newer versions of npm require package.json to be in the folder or else it searches up the heirarchy
-      "cd " + jsDocFolder + " && npm install typedoc",
-      "cd " + jsDocFolder + " && " + typeDoc + " --out out " + config.atomicRoot +
-              "Script/TypeScript/dist/Atomic.d.ts --module commonjs --includeDeclarations --mode file --theme atomic-theme --name " +
-              name + " --readme ./Readme.md"
-    ];
+        cmds = [
+            "cd " + jsDocFolder + " && echo {} > package.json", // newer versions of npm require package.json to be in the folder or else it searches up the heirarchy
+            "cd " + jsDocFolder + " && npm install typedoc",
+            "cd " + jsDocFolder + " && " + typeDoc + " --out out " + config.atomicRoot +
+            "Script/TypeScript/dist/Atomic.d.ts --module commonjs --includeDeclarations --mode file --theme atomic-theme --name " +
+            name + " --readme ./Readme.md"
+        ];
 
-    jake.exec(cmds, function() {
+        jake.exec(cmds, function () {
 
-      common.cleanCreateDir( config.toolDataFolder + "Docs");
+            common.cleanCreateDir(config.toolDataFolder + "Docs");
 
-      fs.copySync(jsDocFolder + "out", config.toolDataFolder + "Docs/JSDocs");
+            fs.copySync(jsDocFolder + "out", config.toolDataFolder + "Docs/JSDocs");
 
-      complete();
+            complete();
 
-      console.log( "completed installing API documentation" );
+            console.log("completed installing API documentation");
 
-    }, {
+        }, {
 
-      printStdout: true
+                printStdout: true
 
-    });
-
-  });
-
-  task('gendoxygen', {
-    async: true
-    }, function() {
-
-    console.log( "Generating C++ API Documentation..." );
-
-    var cppDoc;
-    if (os.platform() == "win32") {
-        cppDoc = "doxygen";  // I dont know what to do here...
-    }
-    else {
-        // use doxygen on path
-        cppDoc = "doxygen";
-    }
-
-    cmds = [
-      "cd " + atomicRoot + "Source && " + cppDoc + " " + atomicRoot + "Build/Docs/CPlusPlus/Doxyfile"
-    ];
-
-    jake.exec(cmds, function() {
-
-      common.cleanCreateDir( config.toolDataFolder + "Docs/CPPDocs"); // clear destination
-
-      fs.copySync(cppDocFolder, config.toolDataFolder + "Docs/CPPDocs"); // copy into release same place as JSDocs
-
-      complete();
-
-      console.log( "completed installing CPP API documentation" );
-
-    }, {
-
-      printStdout: true
+            });
 
     });
 
-  });
+    task('gendoxygen', {
+        async: true
+    }, function () {
 
-  task('genmdoc', {
-    async: true
-    }, function() {
+        console.log("Generating C++ API Documentation...");
 
-    console.log( "Generating C# API Documentation..." );
+        var cppDoc;
+        if (os.platform() == "win32") {
+            cppDoc = "doxygen";  // I dont know what to do here...
+        }
+        else {
+            // use doxygen on path
+            cppDoc = "doxygen";
+        }
 
-    // mdoc must be on path
-    var mdoc = "mdoc";
+        cmds = [
+            "cd " + atomicRoot + "Source && " + cppDoc + " " + atomicRoot + "Build/Docs/CPlusPlus/Doxyfile"
+        ];
 
-    // clear destination
-    common.cleanCreateDir( csharpDocFolder );
+        jake.exec(cmds, function () {
 
-    cmds = [
-      "cd " + csharpDocFolder + " && " + mdoc + " update -o docgen -i ../../AtomicNET/Release/Desktop/AtomicNET.xml ../../AtomicNET/Release/Desktop/AtomicNET.dll",
-      "cd " + csharpDocFolder + " && " + mdoc + " export-html -o html docgen --template=../../../Build/Docs/CSharp/atomictemplate.xlst"
-    ];
+            common.cleanCreateDir(config.toolDataFolder + "Docs/CPPDocs"); // clear destination
 
-    jake.exec(cmds, function() {
+            fs.copySync(cppDocFolder, config.toolDataFolder + "Docs/CPPDocs"); // copy into release same place as JSDocs
 
-      // clear destination
-      common.cleanCreateDir( config.toolDataFolder + "Docs/CSharpDocs");
+            complete();
 
-      // copy into release same place as JSDocs
-      fs.copySync(csharpDocFolder, config.toolDataFolder + "Docs/CSharpDocs");
+            console.log("completed installing CPP API documentation");
 
-      complete();
+        }, {
 
-      console.log( "completed installing C# API documentation" );
+                printStdout: true
 
-    }, {
-
-      printStdout: true
+            });
 
     });
 
-  });
+    task('genmdoc', {
+        async: true
+    }, function () {
 
-  task('genexamples', {
-    async: true
-    }, function() {
+        console.log("Generating C# API Documentation...");
 
-    console.log( "Generating Examples..." );
+        // mdoc must be on path
+        var mdoc = "mdoc";
 
-    // TODO: support pulling examples from a specific branch/commit/etc
-    var exampleSrc = atomicRoot + "Submodules/AtomicExamples/";
-    var exampleDst = config.toolDataFolder + "AtomicExamples/";
+        // clear destination
+        common.cleanCreateDir(csharpDocFolder);
 
-    common.testRemoveDir( exampleDst);
+        cmds = [
+            "cd " + csharpDocFolder + " && " + mdoc + " update -o docgen -i ../../AtomicNET/Release/Desktop/AtomicNET.xml ../../AtomicNET/Release/Desktop/AtomicNET.dll",
+            "cd " + csharpDocFolder + " && " + mdoc + " export-html -o html docgen --template=../../../Build/Docs/CSharp/atomictemplate.xlst"
+        ];
 
-    fs.copySync(exampleSrc, exampleDst);
+        jake.exec(cmds, function () {
 
-    // remove the .git file/folder and save some space
-    fs.removeSync( exampleDst + ".git" );
+            // clear destination
+            common.cleanCreateDir(config.toolDataFolder + "Docs/CSharpDocs");
 
-    complete();
+            // copy into release same place as JSDocs
+            fs.copySync(csharpDocFolder, config.toolDataFolder + "Docs/CSharpDocs");
 
-  });
+            complete();
+
+            console.log("completed installing C# API documentation");
+
+        }, {
+
+                printStdout: true
+
+            });
+
+    });
+
+    task('genexamples', {
+        async: true
+    }, function () {
+
+        console.log("Generating Examples...");
+
+        // TODO: support pulling examples from a specific branch/commit/etc
+        var exampleSrc = atomicRoot + "Submodules/AtomicExamples/";
+        var exampleDst = config.toolDataFolder + "AtomicExamples/";
+
+        common.testRemoveDir(exampleDst);
+
+        fs.copySync(exampleSrc, exampleDst);
+
+        // remove the .git file/folder and save some space
+        fs.removeSync(exampleDst + ".git");
+
+        complete();
+
+    });
 
 
 

@@ -38,7 +38,7 @@ function processOptions(config) {
         config["with-atomicnet"] = false;
     } else {
         if (os.platform() == "win32") {
-            config["with-atomicnet"] = true;
+            config["with-atomicnet"] = false;
         } else if (os.platform() == "darwin") {
             // see if xbuild is available
             config["with-atomicnet"]  = false;

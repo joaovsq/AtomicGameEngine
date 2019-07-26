@@ -1,0 +1,6 @@
+[submodule "Submodules/CEF"]
+	path = Submodules/CEF
+	url = https://github.com/joaovsq/CEF3Binaries.git
+[submodule "Submodules/AtomicExamples"]
+	path = Submodules/AtomicExamples
+	url = https://github.com/joaovsq/AtomicExamples.git
