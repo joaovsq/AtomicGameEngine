@@ -512,14 +512,10 @@ namespace ToolCore
 
 #ifdef ATOMIC_PLATFORM_WINDOWS
 
-        // On Windows, we first check for VS2015, then VS2017 which
-        // at the time of this comment is in RC, refactor once
-        // in general release
-
         FileSystem* fileSystem = GetSubsystem<FileSystem>();
 
         // Query for Visual Studio 2015 path
-        idePath_ = Poco::Environment::get("VS140COMNTOOLS", "").c_str();
+        idePath_ = Poco::Environment::get("VS_PATH", "").c_str();
 
         if (idePath_.Length())
         {
@@ -529,26 +525,13 @@ namespace ToolCore
                 idePath_ += "\\";
             }
 
-            idePath_.Replace("Tools\\", "IDE\\devenv.exe");
+            //idePath_.Replace("Tools\\", "IDE\\devenv.exe");
+			idePath_ += "Common7\\IDE\\devenv.exe";
 
             if (!fileSystem->FileExists(idePath_))
                 idePath_.Clear();
         }
 
-        // If we didn't find VS2015, look for VS2017
-        if (!idePath_.Length())
-        {
-            // check for VS2017
-            Poco::WinRegistryKey regKey("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\VisualStudio\\SxS\\VS7", true);
-            if (regKey.exists() && regKey.exists("15.0"))
-                idePath_ = regKey.getString("15.0").c_str();
-
-            if (idePath_.Length())
-            {
-                // We have VS2017
-                idePath_ += "Common7\\IDE\\devenv.exe";
-            }
-        }
 
 #elif defined ATOMIC_PLATFORM_OSX
 
