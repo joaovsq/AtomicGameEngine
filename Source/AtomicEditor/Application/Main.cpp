@@ -53,7 +53,7 @@ static int RunPlayerApplication()
 {
     Atomic::SharedPtr<Atomic::Context> context(new Atomic::Context());
     Atomic::SharedPtr<AEPlayerApplication> application(new AEPlayerApplication(context));
-    return application->Run();
+	return application->Run();
 }
 
 

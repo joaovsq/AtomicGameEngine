@@ -63,7 +63,7 @@ namespace Atomic
 
         FileSystem *filesystem = GetSubsystem<FileSystem>();
 
-        engineParameters_.InsertNew("WindowTitle", "AtomicPlayer");
+        engineParameters_.InsertNew("WindowTitle", "AtomicEngine Player Game");
 
 #if (ATOMIC_PLATFORM_ANDROID)
         engineParameters_.InsertNew("FullScreen", true);

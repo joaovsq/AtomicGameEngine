@@ -1,3 +1,9 @@
+<color #D4FB79>JV Atomic Game Engine™ License</color>
+
+Fork of the Original Atomic Game Engine
+
+Licensed under the MIT License.
+
 <color #D4FB79>Atomic Game Engine™ License</color>
 
 Copyright (c) 2014-2016, THUNDERBEAST GAMES LLC All rights reserved
