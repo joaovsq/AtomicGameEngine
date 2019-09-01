@@ -197,6 +197,7 @@ bool EditorMode::PlayProjectInternal(const String &addArgs, bool debug)
     String projectExe = settings->GetName() + ".exe";
 
     // TODO: We need to configure project as managed
+	// This is where we detect that it is a c# project
     bool managed = false;
     if (fileSystem->FileExists(project->GetResourcePath() + projectAssembly))
     {

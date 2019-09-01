@@ -35,7 +35,7 @@ export interface ProjectTemplateDefinition {
 }
 
 // Supported project languages
-var projectLanguages = ["CSharp", "JavaScript", "TypeScript"];
+var projectLanguages = ["CSharp", "JavaScript", "TypeScript", "Cpp"];
 
 /**
  * Returns the structured template definition for the provided project type.
@@ -63,11 +63,11 @@ export function getNewProjectTemplateDefinition(projectType: string): ProjectTem
 
         projectTemplate.screenshot = exampleInfoDir + projectTemplate.screenshot;
         projectTemplate.folder = projectTemplateFolder + projectTemplate.folder + "/";
+        console.log("Project Template folder: " + projectTemplate.folder);
 
         projectTemplate.languages = [];
 
         for (var i = 0; i < projectLanguages.length; i++) {
-
             if (fileSystem.dirExists(projectTemplate.folder + projectLanguages[i])) {
                 projectTemplate.languages.push(projectLanguages[i]);
             }
@@ -101,7 +101,7 @@ export function getExampleProjectTemplateDefinitions(): [ProjectTemplateDefiniti
     // list of example folders
     let exampleFolders = <[string]>exampleFoldersJson.examples;
 
-    let examples = <[ProjectTemplateDefinition]>[];
+    let examples = <[ProjectTemplateDefinition]><unknown>[];
 
     // Update all the paths to a more fully qualified path
     exampleFolders.forEach(exampleFolder => {
@@ -154,13 +154,13 @@ export function getExampleProjectTemplateDefinitions(): [ProjectTemplateDefiniti
         }
 
         examples.push({
-            name : exampleJson.name,
-            desc : exampleJson.desc,
-            screenshot : screenshot,
-            folder : folder,
-            languages : languages,
-            appDelegateClass : exampleJson.appDelegateClass,
-            namespace : exampleJson.namespace
+            name: exampleJson.name,
+            desc: exampleJson.desc,
+            screenshot: screenshot,
+            folder: folder,
+            languages: languages,
+            appDelegateClass: exampleJson.appDelegateClass,
+            namespace: exampleJson.namespace
         });
 
     });
@@ -173,7 +173,7 @@ export function getExampleProjectTemplateDefinitions(): [ProjectTemplateDefiniti
  * @param  {string} fileTemplateType
  * @return {[FileTemplateDefinition]}
  */
-export function GetNewFileTemplateDefinitions(fileTemplateType: string) : Editor.Templates.FileTemplateDefinition[] {
+export function GetNewFileTemplateDefinitions(fileTemplateType: string): Editor.Templates.FileTemplateDefinition[] {
     const templateDefinitions = "AtomicEditor/templates/file_template_definitions.json";
     const file = Atomic.cache.getFile(templateDefinitions);
 
@@ -195,7 +195,7 @@ export interface AtomicNETProjectInfo {
     projectTemplate: ProjectTemplateDefinition;
 }
 
-var atomicNETProjectInfo:AtomicNETProjectInfo;
+var atomicNETProjectInfo: AtomicNETProjectInfo;
 
 /**
  * Processes an AtomicNET template, replacing strings with settings
@@ -203,7 +203,7 @@ var atomicNETProjectInfo:AtomicNETProjectInfo;
  * @param  {string} templateFilename
  * @return {boolean}
  */
-function processAtomicNETTemplate(filename:string, templateFilename:string) : boolean {
+function processAtomicNETTemplate(filename: string, templateFilename: string): boolean {
 
     let file = new Atomic.File(templateFilename, Atomic.FileMode.FILE_READ);
 
@@ -247,7 +247,7 @@ function processAtomicNETTemplate(filename:string, templateFilename:string) : bo
  * Generates the Android portion of an AtomicNET project
  * @return {boolean}
  */
-function generateAtomicNETAndroidProject():boolean {
+function generateAtomicNETAndroidProject(): boolean {
 
     let env = ToolCore.toolEnvironment;
     let utils = new Editor.FileUtils();
@@ -273,7 +273,7 @@ function generateAtomicNETAndroidProject():boolean {
     let textFiles = [".cs", ".xml"];
 
     let files = ["MainActivity.cs", "Resources/Resource.Designer.cs", "Resources/drawable/icon.png",
-                 "Resources/values/Strings.xml", "Properties/AndroidManifest.xml", "Properties/AssemblyInfo.cs"];
+        "Resources/values/Strings.xml", "Properties/AndroidManifest.xml", "Properties/AssemblyInfo.cs"];
 
     for (var i = 0; i < files.length; i++) {
 
@@ -284,7 +284,7 @@ function generateAtomicNETAndroidProject():boolean {
 
             if (!fileSystem.copy(templateName, filename)) {
 
-                console.log("Failed to copy: ", templateName, " to ",  filename);
+                console.log("Failed to copy: ", templateName, " to ", filename);
                 return false;
             }
 
@@ -305,7 +305,7 @@ function generateAtomicNETAndroidProject():boolean {
  * Generates the iOS portion of an AtomicNET project
  * @return {boolean}
  */
-function generateAtomicNETIOSProject():boolean {
+function generateAtomicNETIOSProject(): boolean {
 
     let env = ToolCore.toolEnvironment;
     let utils = new Editor.FileUtils();
@@ -331,7 +331,7 @@ function generateAtomicNETIOSProject():boolean {
     let textFiles = [".cs", ".plist"];
 
     let files = ["Main.cs", "AppUIDelegate.cs", "Entitlements.plist", "Info.plist",
-                 "Properties/AssemblyInfo.cs"];
+        "Properties/AssemblyInfo.cs"];
 
     for (var i = 0; i < files.length; i++) {
 
@@ -342,7 +342,7 @@ function generateAtomicNETIOSProject():boolean {
 
             if (!fileSystem.copy(templateName, filename)) {
 
-                console.log("Failed to copy: ", templateName, " to ",  filename);
+                console.log("Failed to copy: ", templateName, " to ", filename);
                 return false;
             }
 
@@ -364,7 +364,7 @@ function generateAtomicNETIOSProject():boolean {
  * Generates the Desktop portion of an AtomicNET project
  * @return {boolean}
  */
-function generateAtomicNETDesktopProject():boolean {
+function generateAtomicNETDesktopProject(): boolean {
 
     let env = ToolCore.toolEnvironment;
     let utils = new Editor.FileUtils();
@@ -392,7 +392,7 @@ function generateAtomicNETDesktopProject():boolean {
  * @param  {AtomicNETProjectInfo} projectInfo
  * @return {boolean}
  */
-export function generateAtomicNETProject(projectInfo:AtomicNETProjectInfo):boolean {
+export function generateAtomicNETProject(projectInfo: AtomicNETProjectInfo): boolean {
 
     atomicNETProjectInfo = projectInfo;
 

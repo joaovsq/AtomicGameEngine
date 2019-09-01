@@ -165,7 +165,9 @@ namespace AtomicEditor
             ErrorExit("Error executing main.js");
         }
 
-        GetSubsystem<LicenseSystem>()->Initialize();
+
+
+		GetSubsystem<LicenseSystem>()->Initialize();
 
         Input* input = GetSubsystem<Input>();
         // Ensure exclusive fullscreen is disabled in Editor application

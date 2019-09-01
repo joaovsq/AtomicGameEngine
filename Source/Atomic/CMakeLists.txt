@@ -243,3 +243,21 @@ endif ()
 if (UNIX OR MINGW)
     target_compile_options(Atomic PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-std=gnu++11>)
 endif ()
+
+
+# Now we copy all headers to the Data include folder, to be used in a Cpp game project
+file(GLOB_RECURSE CPP_GAME_INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
+set(CPP_GAME_INCLUDE_DIR ${ATOMIC_SOURCE_DIR}/Data/Include)
+file(COPY ${CPP_GAME_INCLUDE_FILES} DESTINATION ${CPP_GAME_INCLUDE_DIR})
+
+# We also must copy the Atomic.lib to be used in a Cpp game project
+set(CPP_GAME_LIB_DIR ${ATOMIC_SOURCE_DIR}/Data/Lib)
+add_custom_command( TARGET Atomic POST_BUILD
+                    COMMAND "${CMAKE_COMMAND}"
+                    ARGS -E make_directory \"${CPP_GAME_LIB_DIR}\"
+					COMMAND "${CMAKE_COMMAND}"
+                    ARGS -E copy_if_different \"${PROJECT_BINARY_DIR}/Source/Atomic/Atomic.lib\" \"${CPP_GAME_LIB_DIR}\"
+					COMMENT "Copying the Atomic Library to ${CPP_GAME_LIB_DIR}")
+
+# Now we configure the cpp game template with the correct include and lib directories
+configure_file(CMakeLists.txt.in ${ATOMIC_SOURCE_DIR}/Data/AtomicEditor/ProjectTemplates/Project3D/Cpp/CMakeLists.txt)

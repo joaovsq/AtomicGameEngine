@@ -73,7 +73,7 @@ class CreateProject extends ModalWindow {
 
     }
 
-    addPlatformButton(platformName:string, platformLogo:string):Atomic.UIButton {
+    addPlatformButton(platformName: string, platformLogo: string): Atomic.UIButton {
 
         var platformcontainer = <Atomic.UILayout>this.getWidget("platformcontainer");
 
@@ -231,8 +231,8 @@ class CreateProject extends ModalWindow {
             }
 
             var projectSettings = {
-                name : name,
-                platforms : platforms
+                name: name,
+                platforms: platforms
             };
 
             var jsonFile = new Atomic.File(folder + "Settings/Project.json", Atomic.FileMode.FILE_WRITE);
@@ -246,10 +246,10 @@ class CreateProject extends ModalWindow {
             if (atomicNET) {
                 if (!ProjectTemplates.generateAtomicNETProject({
                     name: name,
-                    appID : this.appIDField.text,
-                    platforms : platforms,
-                    projectFolder : folder,
-                    projectTemplate : this.projectTemplate
+                    appID: this.appIDField.text,
+                    platforms: platforms,
+                    projectFolder: folder,
+                    projectTemplate: this.projectTemplate
                 })) {
                     var message = "Unable to generate AtomicNET project: " + folder;
                     EditorUI.showModalError("New Project Editor Error", message);
@@ -277,9 +277,8 @@ class CreateProject extends ModalWindow {
 
     }
 
-    handleLanguageSwitch(selectedLanguage:string) {
-
-        if (selectedLanguage == "CSharp" || selectedLanguage == "C#") {
+    handleLanguageSwitch(selectedLanguage: string) {
+        if (selectedLanguage == "CSharp" || selectedLanguage == "C#" || selectedLanguage == "Cpp") {
 
             this.html5Button["greenPlus"].visibility = Atomic.UI_WIDGET_VISIBILITY.UI_WIDGET_VISIBILITY_INVISIBLE;
             this.html5Button.value = 0;
@@ -361,6 +360,7 @@ class CreateProject extends ModalWindow {
         this.projectLanguageFieldSource.clear();
 
         this.projectTemplate.languages.forEach(language => {
+            console.log("--Project Languages: " + language);
             this.projectLanguageFieldSource.addItem(new Atomic.UISelectItem(language));
         });
 
@@ -370,21 +370,25 @@ class CreateProject extends ModalWindow {
         let jsrank = -1;
         let csrank = -1;
         let tsrank = -1;
+        let cpprank = -1;
         let ii = 0;
-        for ( ii = 0; ii < this.projectLanguageFieldSource.getItemCount(); ii++ ) { // get rankings
-            if ( this.projectLanguageFieldSource.getItemStr( ii ) == "JavaScript" ) jsrank = ii;
-            if ( this.projectLanguageFieldSource.getItemStr( ii ) == "CSharp" ) csrank = ii;
-            if ( this.projectLanguageFieldSource.getItemStr( ii ) == "TypeScript" ) tsrank = ii;
+        for (ii = 0; ii < this.projectLanguageFieldSource.getItemCount(); ii++) { // get rankings
+            if (this.projectLanguageFieldSource.getItemStr(ii) == "JavaScript") jsrank = ii;
+            if (this.projectLanguageFieldSource.getItemStr(ii) == "CSharp") csrank = ii;
+            if (this.projectLanguageFieldSource.getItemStr(ii) == "TypeScript") tsrank = ii;
+            if (this.projectLanguageFieldSource.getItemStr(ii) == "Cpp") cpprank = ii;
         }
 
-        if ( this.defaultLanguage == "JavaScript" ) defrank = jsrank; // which is the default language
-        if ( this.defaultLanguage == "CSharp" ) defrank = csrank;
-        if ( this.defaultLanguage == "TypeScript" ) defrank = tsrank;
+        if (this.defaultLanguage == "JavaScript") defrank = jsrank; // which is the default language
+        if (this.defaultLanguage == "CSharp") defrank = csrank;
+        if (this.defaultLanguage == "TypeScript") defrank = tsrank;
+        if (this.defaultLanguage == "Cpp") defrank = cpprank;
 
-        if ( defrank > -1 ) this.projectLanguageField.value = defrank;  // the default language is present
-        else if ( jsrank > -1 ) this.projectLanguageField.value = jsrank;  // js is present
-        else if ( csrank > -1 ) this.projectLanguageField.value = csrank;  // cs is present
-        else if ( tsrank > -1 ) this.projectLanguageField.value = tsrank;  // ts is present
+        if (defrank > -1) this.projectLanguageField.value = defrank;  // the default language is present
+        else if (jsrank > -1) this.projectLanguageField.value = jsrank;  // js is present
+        else if (csrank > -1) this.projectLanguageField.value = csrank;  // cs is present
+        else if (tsrank > -1) this.projectLanguageField.value = tsrank;  // ts is present
+        else if (cpprank > -1) this.projectLanguageField.value = cpprank;
     }
 
     projectPathField: Atomic.UIEditField;

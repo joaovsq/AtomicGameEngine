@@ -10,6 +10,8 @@ Bin/*.pak
 Bin/NativePluginSDK/*
 Source/Atomic/Javascript/Modules/*
 Data/AtomicPlayer/Resources/CoreData/Shaders/HLSL/Cache
+Data/Lib/*
+Data/Include/*
 Resources/CoreData/Shaders/HLSL/Cache
 Artifacts/*
 Docs/out/*
@@ -25,3 +27,4 @@ Script/Haxe/*
 **/.vscode
 .idea
 Atomic.log
+Data/AtomicEditor/ProjectTemplates/Project3D/Cpp/CMakeLists.txt

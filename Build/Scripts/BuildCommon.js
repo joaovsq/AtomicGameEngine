@@ -108,6 +108,7 @@ namespace('build', function () {
     task('genscripts', {
         async: true
     }, function (force) {
+        console.log("Building the Javascript/Typescript bindings...");
 
         // default to true
         if (force != "true" && force != "false") {
