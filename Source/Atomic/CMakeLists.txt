@@ -247,7 +247,7 @@ endif ()
 
 # Include headers to be used in a Cpp game project
 set(CPP_GAME_INCLUDE_DIR ${ATOMIC_SOURCE_DIR}/Source
-		                 ${ATOMIC_SOURCE_DIR}/Source/ThirdyParty)
+		                 ${ATOMIC_SOURCE_DIR}/Source/ThirdParty)
 
 # Atomic.lib to be used in a Cpp game project
 set(CPP_GAME_LIB_DIR ${PROJECT_BINARY_DIR}/Source/Atomic/Atomic.lib)
