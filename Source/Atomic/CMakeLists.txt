@@ -245,6 +245,7 @@ if (UNIX OR MINGW)
 endif ()
 
 
+# TODO: Verify why the cpp game template is resulting in a Link error, for now we are just build the games in the CppGame folder with the engine. Check the root CMakeLists.txt
 # Include headers to be used in a Cpp game project
 set(CPP_GAME_INCLUDE_DIR ${ATOMIC_SOURCE_DIR}/Source
 		                 ${ATOMIC_SOURCE_DIR}/Source/ThirdParty)

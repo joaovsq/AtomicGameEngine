@@ -7,14 +7,19 @@ file (GLOB GAME_SOURCE_FILES Source/*.cpp Source/*.h)
 if (WIN32)
     add_definitions(-DATOMIC_WIN32_CONSOLE)
 endif()
+add_compile_definitions(ATOMIC_STATIC_DEFINE)
 
 include_directories(${CPP_GAME_INCLUDE_DIR})
 
 add_library(GameLib ${GAME_SOURCE_FILES})
 target_link_libraries(GameLib PUBLIC ${CPP_GAME_LIB_DIR})
 
-add_executable(CppGame Main.cpp)
+add_executable(CppGame Game.h Game.cpp)
 target_link_libraries(CppGame GameLib)
+
+if (MSVC)
+    target_compile_options(CppGame PUBLIC $<$<CONFIG:Debug>:${ATOMIC_MSVC_RUNTIME}d> $<$<NOT:$<CONFIG:Debug>>:${ATOMIC_MSVC_RUNTIME}>)
+endif ()
 
 #[[
 # Copy AtomicTool to Artifacts
