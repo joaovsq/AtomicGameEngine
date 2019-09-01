@@ -10,7 +10,7 @@ endif()
 
 add_executable(CppGame ${GAME_SOURCE_FILES})
 target_include_directories(CppGame PUBLIC ${CPP_GAME_INCLUDE_DIR})
-target_link_libraries(CppGame ${CPP_GAME_LIB_DIR}/Atomic.lib)
+target_link_libraries(CppGame ${CPP_GAME_LIB_DIR})
 
 #[[
 
