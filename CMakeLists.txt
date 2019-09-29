@@ -1,4 +1,3 @@
-
 project(Atomic)
 
 cmake_minimum_required(VERSION 3.3)
@@ -6,7 +5,6 @@ cmake_minimum_required(VERSION 3.3)
 set(ATOMIC_SOURCE_DIR ${Atomic_SOURCE_DIR})
 set(CMAKE_MODULE_PATH ${ATOMIC_SOURCE_DIR}/Build/CMake/Modules)
 set(ATOMIC_DESKTOP TRUE)
-set(ATOMIC_WEBVIEW TRUE)
 
 include(AtomicGit)
 include(AtomicUtils)
@@ -35,31 +33,6 @@ include(AtomicPlatform)
 find_program(CLDOC cldoc)
 if (CLDOC)
     add_custom_target(docs DEPENDS AtomicEngineDocs)
-endif ()
-
-if (ATOMIC_WEBVIEW)
-
-    if (APPLE)
-        if (POLICY CMP0037)
-            # new cmake doesn't like creating framework whose name has spaces
-            # which CEF3 scripts (including shell) currently require on OSX
-            cmake_policy(SET CMP0037 OLD)
-        endif ()
-        set(CEF_ROOT "${ATOMIC_SOURCE_DIR}/Submodules/CEF/MacOSX")
-    elseif (WIN32)
-        if (ATOMIC_PROJECT_ARCH STREQUAL "x86")
-        else ()
-            set(CEF_ROOT "${ATOMIC_SOURCE_DIR}/Submodules/CEF/Windows/64bit")
-        endif ()
-    else ()
-        set(CEF_ROOT "${ATOMIC_SOURCE_DIR}/Submodules/CEF/Linux")
-    endif ()
-
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
-    find_package(CEF REQUIRED)
-    include_directories(${CEF_ROOT})
-
-    add_subdirectory(${CEF_LIBCEF_DLL_WRAPPER_PATH} libcef_dll_wrapper)
 endif ()
 
 add_subdirectory(Source)
