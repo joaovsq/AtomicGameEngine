@@ -10,7 +10,7 @@ file (GLOB NETWORK_SOURCE Network/*.cpp Network/*.h)
 file (GLOB WEB_SOURCE Web/*.cpp Web/*.h)
 file (GLOB SCRIPT_SOURCE Script/*.cpp Script/*.h)
 file (GLOB METRICS_SOURCE Metrics/*.cpp Metrics/*.h)
-if (NOT WEB AND NOT IOS AND NOT ANDROID)
+if (NOT ANDROID)
     file (GLOB IPC_SOURCE IPC/*.cpp IPC/*.h)
 endif()
 file (GLOB ATOMIC2D_SOURCE Atomic2D/*.cpp Atomic2D/*.h)
@@ -43,10 +43,6 @@ else()
     file (GLOB GRAPHICS_IMPL_SOURCE Graphics/OpenGL/*.cpp Graphics/OpenGL/*.h)
 endif()
 
-if (APPLE AND NOT IOS)
-    set (PLATFORM_SOURCE IO/MacFileWatcher.mm UI/UIDragDropMac.mm)
-endif()
-
 set (SOURCE_FILES ${CONTAINER_SOURCE} ${CORE_SOURCE} ${ENGINE_SOURCE} ${INPUT_SOURCE}
                   ${AUDIO_SOURCE} ${IO_SOURCE} ${MATH_SOURCE}
                   ${RESOURCE_SOURCE} ${PHYSICS_SOURCE} ${IPC_SOURCE}
@@ -57,9 +53,7 @@ set (SOURCE_FILES ${CONTAINER_SOURCE} ${CORE_SOURCE} ${ENGINE_SOURCE} ${INPUT_SO
                   ${WEB_SOURCE} ${SCRIPT_SOURCE} ${METRICS_SOURCE}
                   ${PLATFORM_SOURCE} ${DATABASE_SOURCE} ${IK_SOURCE} ${NAVIGATION_SOURCE})
 
-if (NOT WEB)
-  set (SOURCE_FILES ${SOURCE_FILES} ${NETWORK_SOURCE})
-endif()
+set (SOURCE_FILES ${SOURCE_FILES} ${NETWORK_SOURCE})
 
 GroupSources("Atomic2D")
 GroupSources("Atomic3D")
@@ -114,13 +108,6 @@ endif ()
 if (ANDROID)
     target_link_libraries (Atomic dl log android GLESv1_CM GLESv2)
     target_compile_definitions(Atomic PUBLIC -DATOMIC_PLATFORM_ANDROID=1 -DGLEW_NO_GLU=1)
-elseif (APPLE)
-    if (IOS)
-        target_compile_definitions(Atomic PUBLIC -DATOMIC_PLATFORM_IOS=1 -DIOS=1)
-    else () # MacOS
-        target_link_libraries (Atomic GLEW)
-        target_compile_definitions(Atomic PUBLIC -DATOMIC_PLATFORM_OSX=1)
-    endif ()
 elseif (LINUX)
     target_link_libraries (Atomic pthread GLEW GL dl)
     target_compile_definitions(Atomic PUBLIC -DATOMIC_PLATFORM_LINUX=1)
@@ -207,10 +194,7 @@ else ()
     endif ()
 endif ()
 
-# TODO: enable shared library builds.
-if (NOT APPLE OR IOS OR WEB)
-    target_compile_definitions (Atomic PUBLIC -DATOMIC_TBUI=1)
-endif ()
+target_compile_definitions (Atomic PUBLIC -DATOMIC_TBUI=1)
 
 if (ATOMIC_DATABASE_SQLITE)
     target_link_libraries(Atomic sqlite)
