@@ -27,11 +27,6 @@
 #include "../Core/Object.h"
 #include "../Container/List.h"
 #include "../Input/InputEvents.h"
-#include "../UI/UIButton.h"
-
-// ATOMIC BEGIN
-// #include "../UI/Cursor.h"
-// ATOMIC END
 
 namespace Atomic
 {
@@ -49,17 +44,13 @@ enum MouseMode
 class Deserializer;
 class Graphics;
 class Serializer;
-class UIWidget;
 class XMLFile;
-class UIButton;
 
 const IntVector2 MOUSE_POSITION_OFFSCREEN = IntVector2(M_MIN_INT, M_MIN_INT);
 
 /// %Input state for a finger touch.
 struct TouchState
 {
-    /// Return last touched UI element, used by scripting integration.
-    UIWidget* GetTouchedElement();
 
     /// Touch (finger) ID.
     int touchID_;
@@ -71,10 +62,6 @@ struct TouchState
     IntVector2 delta_;
     /// Finger pressure.
     float pressure_;
-// ATOMIC BEGIN
-    /// Last touched UI widget
-    WeakPtr<UIWidget> touchedWidget_;
-// ATOMIC END
 };
 
 /// %Input state for a joystick.
@@ -144,8 +131,6 @@ public:
     /// Haptic support
     SDL_Haptic *haptic_;
     bool canRumble_;
-    /// UI element containing the screen joystick.
-    // UIElement* screenJoystick_;
     // ATOMIC END
     /// Joystick name.
     String name_;
@@ -335,8 +320,6 @@ public:
     bool IsMinimized() const;
 
 // ATOMIC BEGIN
-    /// Binds UIButton element to the given button
-    void BindButton(UIButton* touchButton, int button);
 
     void SimulateButtonDown(int button);
     void SimulateButtonUp(int button);
@@ -351,8 +334,7 @@ public:
     const IntVector2& GetTouchLastPosition(unsigned index) { if (index >= touches_.Size()) return IntVector2::ZERO; return touches_[index].lastPosition_; }
     const IntVector2& GetTouchDelta(unsigned index) { if (index >= touches_.Size()) return IntVector2::ZERO; return touches_[index].delta_; }
     const float GetTouchPressure(unsigned index) { if (index >= touches_.Size()) return 0.0f; return touches_[index].pressure_; }
-    UIWidget* GetTouchWidget(unsigned index) { if (index >= touches_.Size()) return 0; return touches_[index].touchedWidget_; }    
-
+    
 // ATOMIC END
 
 private:

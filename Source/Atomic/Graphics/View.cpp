@@ -48,7 +48,6 @@
 #include "../IO/Log.h"
 #include "../Resource/ResourceCache.h"
 #include "../Scene/Scene.h"
-#include "../UI/UI.h"
 
 #include "../DebugNew.h"
 
@@ -1724,7 +1723,6 @@ void View::ExecuteRenderPathCommands()
             case CMD_RENDERUI:
                 {
                     SetRenderTargets(command);
-                    GetSubsystem<UI>()->Render(false);
                 }
                 break;
 

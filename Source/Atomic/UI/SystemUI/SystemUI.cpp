@@ -31,7 +31,6 @@
 #include "../../Resource/ResourceCache.h"
 #include "../../UI/SystemUI/SystemUI.h"
 #include "../../UI/SystemUI/Console.h"
-#include "../../UI/SystemUI/DebugHud.h"
 #include <SDL.h>
 
 
@@ -84,7 +83,6 @@ SystemUI::SystemUI(Atomic::Context* context)
     SubscribeToEvent(E_SCREENMODE, std::bind(&SystemUI::UpdateProjectionMatrix, this));
 
     context_->RegisterSubsystem(new Console(context_));
-    context_->RegisterSubsystem(new DebugHud(context_));
 }
 
 SystemUI::~SystemUI()

@@ -31,13 +31,11 @@
 # Changes should be marked with "ATOMIC BEGIN|END" or "ATOMIC FIX" comments.
 
 add_subdirectory(Box2D)
-add_subdirectory(Duktape)
 add_subdirectory(FreeType)
 add_subdirectory(JO)
 add_subdirectory(LZ4)
 add_subdirectory(PugiXml)
 add_subdirectory(STB)
-add_subdirectory(TurboBadger)
 add_subdirectory(zlib)
 
 if (NOT ATOMIC_BUILD_2D)

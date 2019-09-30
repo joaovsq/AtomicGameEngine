@@ -35,17 +35,12 @@
 #include "MaterialImporter.h"
 #include "TextureImporter.h"
 #include "PrefabImporter.h"
-#include "JavascriptImporter.h"
 #include "JSONImporter.h"
 #include "SpriterImporter.h"
 #include "TMXImporter.h"
 #include "PEXImporter.h"
 #include "TextImporter.h"
-#include "TypeScriptImporter.h"
 #include "ParticleEffectImporter.h"
-#include "CSharpImporter.h"
-#include "NETAssemblyImporter.h"
-
 #include "AssetEvents.h"
 #include "Asset.h"
 
@@ -282,14 +277,6 @@ bool Asset::CreateImporter()
         {
             importer_ = new PrefabImporter(context_, this);
         }
-        else if (ext == ".js")
-        {
-            importer_ = new JavascriptImporter(context_, this);
-        }
-        else if (ext == ".ts")
-        {
-            importer_ = new TypeScriptImporter(context_, this);
-        }
         else if (ext == ".json")
         {
             importer_ = new JSONImporter(context_, this);
@@ -321,14 +308,6 @@ bool Asset::CreateImporter()
         else if (ext == ".txt" || ext == ".xml" || ext == ".hlsl" || ext == ".glsl")
         {
             importer_ = new TextImporter(context_, this);
-        }
-        else if (ext == ".dll")
-        {
-            importer_ = new NETAssemblyImporter(context_, this);
-        }
-        else if (ext == ".cs")
-        {
-            importer_ = new CSharpImporter(context_, this);
         }
         else if (textureFormats.Contains(ext))
         {

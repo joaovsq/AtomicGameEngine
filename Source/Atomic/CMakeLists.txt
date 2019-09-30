@@ -15,7 +15,6 @@ if (NOT ANDROID)
 endif()
 file (GLOB ATOMIC2D_SOURCE Atomic2D/*.cpp Atomic2D/*.h)
 file (GLOB SCENE_SOURCE Scene/*.cpp Scene/*.h)
-file (GLOB UI_SOURCE UI/*.cpp UI/*.h)
 file (GLOB SYSTEM_UI_SOURCE UI/SystemUI/*.cpp UI/SystemUI/*.h)
 file (GLOB PHYSICS_SOURCE Physics/*.cpp Physics/*.h)
 file (GLOB NAVIGATION_SOURCE Navigation/*.cpp Navigation/*.h)
@@ -49,7 +48,7 @@ set (SOURCE_FILES ${CONTAINER_SOURCE} ${CORE_SOURCE} ${ENGINE_SOURCE} ${INPUT_SO
                   ${GRAPHICS_SOURCE} ${GRAPHICS_IMPL_SOURCE}
                   ${ATOMIC3D_SOURCE}
                   ${ATOMIC2D_SOURCE} ${ENVIRONMENT_SOURCE}
-                  ${SCENE_SOURCE} ${UI_SOURCE} ${SYSTEM_UI_SOURCE}
+                  ${SCENE_SOURCE} ${SYSTEM_UI_SOURCE}
                   ${WEB_SOURCE} ${SCRIPT_SOURCE} ${METRICS_SOURCE}
                   ${PLATFORM_SOURCE} ${DATABASE_SOURCE} ${IK_SOURCE} ${NAVIGATION_SOURCE})
 
@@ -100,7 +99,7 @@ endif ()
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(Atomic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../)
-target_link_libraries (Atomic Box2D Duktape TurboBadger FreeType JO LZ4 PugiXml STB SDL ASIO rapidjson WebSocketPP imgui)
+target_link_libraries (Atomic Box2D FreeType JO LZ4 PugiXml STB SDL ASIO rapidjson WebSocketPP imgui)
 target_compile_definitions (Atomic PUBLIC -DATOMIC_CXX11=1)
 if (ATOMIC_64BIT)
     target_compile_definitions (Atomic PUBLIC -DATOMIC_64BIT=1)

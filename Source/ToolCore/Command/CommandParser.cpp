@@ -27,8 +27,6 @@
 #include "ImportCmd.h"
 #include "PlayCmd.h"
 #include "EditCmd.h"
-#include "BindCmd.h"
-#include "NETCmd.h"
 #include "ProjectCmd.h"
 #include "CacheCmd.h"
 
@@ -74,14 +72,6 @@ Command* CommandParser::Parse(const Vector<String>& arguments)
             else if (argument == "edit")
             {
                 cmd = new EditCmd(context_);
-            }
-            else if (argument == "bind")
-            {
-                cmd = new BindCmd(context_);
-            }
-            else if (argument == "net")
-            {
-                cmd = new NETCmd(context_);
             }
             else if (argument == "project")
             {

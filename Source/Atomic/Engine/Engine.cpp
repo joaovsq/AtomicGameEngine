@@ -45,9 +45,6 @@
 
 // ATOMIC BEGIN
 #include "../Resource/XMLFile.h"
-#include "../UI/SystemUI/SystemUI.h"
-#include "../UI/SystemUI/Console.h"
-#include "../UI/SystemUI/DebugHud.h"
 // ATOMIC END
 
 #ifdef ATOMIC_NAVIGATION
@@ -72,7 +69,6 @@
 #include "../Resource/Localization.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneEvents.h"
-#include "../UI/UI.h"
 #ifdef ATOMIC_ATOMIC2D
 #include "../Atomic2D/Atomic2D.h"
 #endif
@@ -167,7 +163,6 @@ Engine::Engine(Context* context) :
 #endif
     context_->RegisterSubsystem(new Input(context_));
     context_->RegisterSubsystem(new Audio(context_));
-    context_->RegisterSubsystem(new UI(context_));
 
     // Register object factories for libraries which are not automatically registered along with subsystem creation
     RegisterSceneLibrary(context_);
@@ -212,7 +207,6 @@ Engine::Engine(Context* context) :
 #endif
     context_->input_ = context_->GetSubsystem<Input>();
     context_->audio_ = context_->GetSubsystem<Audio>();
-    context_->ui_ = context_->GetSubsystem<UI>();
     // ATOMIC END
 }
 
@@ -394,14 +388,7 @@ bool Engine::Initialize(const VariantMap& parameters)
 #endif
 
     // ATOMIC BEGIN
-    if (!headless_)
-    {
-        context_->RegisterSubsystem(new SystemUI(context_));
-        context_->systemUi_ = context_->GetSubsystem<SystemUI>();
-        context_->console_ = context_->GetSubsystem<Console>();
-        context_->debugHud_ = context_->GetSubsystem<DebugHud>();
-    }
-    context_->metrics_ = context_->GetSubsystem<Metrics>();
+    //context_->metrics_ = context_->GetSubsystem<Metrics>();
     // ATOMIC END
 
     frameTimer_.Reset();
@@ -798,7 +785,6 @@ void Engine::Render()
         return;
 
     GetSubsystem<Renderer>()->Render();
-    GetSubsystem<UI>()->Render();
     graphics->EndFrame();
 }
 
