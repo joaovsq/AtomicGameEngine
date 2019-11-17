@@ -4,6 +4,3 @@
 [submodule "Submodules/AtomicExamples"]
 	path = Submodules/AtomicExamples
 	url = https://github.com/joaovsq/AtomicExamples.git
-[submodule "Submodules/CppGames"]
-	path = Submodules/CppGames
-	url = https://github.com/joaovsq/AtomicCppGames.git

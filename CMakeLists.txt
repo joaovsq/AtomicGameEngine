@@ -64,11 +64,10 @@ endif ()
 
 add_subdirectory(Source)
 
+# Examples submodule
+#[[ 
 if (ATOMIC_DESKTOP AND ATOMIC_DEV_BUILD)
 	
-	# This subdirectory is specific to the cpp games, using the engine as a library
-	add_subdirectory(Submodules/CppGames)
-
     if (NOT DEFINED ATOMIC_CPLUSPLUS_EXAMPLES)
         set(ATOMIC_CPLUSPLUS_EXAMPLES 1)
     endif ()
@@ -79,3 +78,4 @@ if (ATOMIC_DESKTOP AND ATOMIC_DEV_BUILD)
         endif ()
     endif ()
 endif ()
+]]
