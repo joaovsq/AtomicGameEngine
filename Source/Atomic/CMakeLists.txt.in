@@ -1,6 +1,8 @@
 ## This template is used to generate the CMakeFiles.txt for a Cpp Game Project
 project(CppGame)
 
+set(GAME_SOURCE_DIR ${CppGame_SOURCE_DIR})
+
 # Define source files
 file (GLOB GAME_SOURCE_FILES Source/*.cpp Source/*.h)
 
@@ -9,13 +11,13 @@ if (WIN32)
 endif()
 add_compile_definitions(ATOMIC_STATIC_DEFINE)
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/Atomic")
 include_directories(${CPP_GAME_INCLUDE_DIR})
 
-add_library(GameLib ${GAME_SOURCE_FILES})
-target_link_libraries(GameLib PUBLIC ${CPP_GAME_LIB_DIR})
+add_executable(CppGame ${GAME_SOURCE_FILES})
+target_link_libraries(CppGame Atomic)
 
-add_executable(CppGame Game.h Game.cpp)
-target_link_libraries(CppGame GameLib)
+target_compile_definitions(Clouds PUBLIC -DGAME_ROOT_DIR="${GAME_SOURCE_DIR}" -DGAME_ROOT_BUILD_DIR="${CMAKE_BINARY_DIR}")
 
 if (MSVC)
     target_compile_options(CppGame PUBLIC $<$<CONFIG:Debug>:${ATOMIC_MSVC_RUNTIME}d> $<$<NOT:$<CONFIG:Debug>>:${ATOMIC_MSVC_RUNTIME}>)

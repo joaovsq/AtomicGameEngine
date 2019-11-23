@@ -6,7 +6,7 @@
 
 using namespace Atomic;
 
-class Game : public Atomic::Application {
+class Game : public Application {
 
 	// Enable type information.
 	ATOMIC_OBJECT(Game, Application)

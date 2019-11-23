@@ -27,7 +27,20 @@ Game::Game(Context* context) : Application(context) {
 }
 
 void Game::Setup() {
+	// Modify engine startup parameters
+	engineParameters_[EP_WINDOW_TITLE] = GetTypeName();
+	engineParameters_[EP_WINDOW_WIDTH] = 1440;
+	engineParameters_[EP_WINDOW_HEIGHT] = 960;
+	engineParameters_[EP_LOG_NAME] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("atomic", "logs") + GetTypeName() + ".log";
+	engineParameters_[EP_FULL_SCREEN] = false;
+	engineParameters_[EP_HEADLESS] = false;
+	engineParameters_[EP_SOUND] = false;
+	engineParameters_[EP_RESOURCE_PATHS] = "Resources";
 
+	if (!engineParameters_.Contains(EP_RESOURCE_PREFIX_PATHS))
+	{
+		engineParameters_[EP_RESOURCE_PREFIX_PATHS] = GAME_ROOT_DIR;
+	}
 }
 
 void Game::Start()
